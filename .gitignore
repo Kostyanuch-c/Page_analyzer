@@ -1,0 +1,10 @@
+.venv/
+.idea/
+dist/
+*pycache*
+.coverage
+coverage.xml
+*.pyc
+first_file.yml
+second_file.json
+.env
