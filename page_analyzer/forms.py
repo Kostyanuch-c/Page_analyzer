@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms.validators import URL, InputRequired, Length
-from wtforms import URLField, SubmitField
+from wtforms.validators import url, InputRequired, Length
+from wtforms import SubmitField, StringField
 
 
 class URLForm(FlaskForm):
-    url = URLField('', validators=[InputRequired(), URL(), Length(max=255)])
+    url = StringField('', validators=[InputRequired(), url(), Length(max=255)])
     check = SubmitField('Проверить')

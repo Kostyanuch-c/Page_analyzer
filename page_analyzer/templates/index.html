@@ -6,10 +6,14 @@
         <div class="col-lg-7 border rounded-2 bg-light mx-auto mt-3 px-4 py-5">
             <h1 class="display-3">Анализатор страниц</h1>
             <p class="lead">Бесплатно проверяйте сайты на SEO-пригодность</p>
-            <form action="{{ url_for('check_url')}}" method="post" class="d-flex justify-content-center">
+            <form action="{{ url_for('get_and_check_url')}}" method="post" class="d-flex justify-content-center">
                 {{ form.hidden_tag() }}
                 {{ form.url.label(class="form-label") }}
-                {{ form.url(class="form-control", type="url", placeholder="https://example.com") }}
+                {% if form.url.errors %}
+                {{ form.url(class="form-control is-invalid", placeholder="https://example.com") }}
+                {% else %}
+                {{ form.url(class="form-control", placeholder="https://example.com") }}
+                {% endif %}
                 {{ form.check(class="btn btn-primary ps-4 m-1 btn-lg") }}
             </form>
         </div>
