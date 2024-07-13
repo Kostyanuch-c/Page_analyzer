@@ -1,6 +1,7 @@
 {% extends 'layout/default.html' %}
 
 {% block content %}
+{% include 'layout/flash.html' %}
 <h1>Сайт: {{ url_items['name'] }}</h1>
 <li> {{ url_items['id'] }}</li>
 <li>{{ url_items['name'] }}</li>

@@ -6,7 +6,8 @@ import psycopg2
 
 def make_connection():
     try:
-        return psycopg2.connect(Config.DATABASE_URL, cursor_factory=RealDictCursor)
+        return psycopg2.connect(Config.DATABASE_URL,
+                                cursor_factory=RealDictCursor)
     except psycopg2.Error as exception:
         return exception
 
@@ -16,22 +17,24 @@ def add_new_url(url):
         make_connection() as connection,
         connection.cursor() as cursor,
     ):
-        cursor.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)', (url, date.today()))
+        cursor.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)',
+                       (url, date.today()))
         connection.commit()
 
 
-# def check_exist_url(url):
-#     with (
-#         make_connection() as connection,
-#         connection.cursor() as cursor,
-#     ):
-#         cursor.execute('SELECT * FROM urls WHERE name = %s', (url,))
-#         response = cursor.fetchone()
-#         print(response)
-#
-#         if response:
-#             return response
-#         return False
+def check_exist_url(url):
+    with (
+        make_connection() as connection,
+        connection.cursor() as cursor,
+    ):
+        cursor.execute('SELECT * FROM urls WHERE name = %s', (url,))
+        response = cursor.fetchone()
+        print(response)
+
+        if response:
+            return True
+        return False
+
 
 def get_url_id(url):
     with (
