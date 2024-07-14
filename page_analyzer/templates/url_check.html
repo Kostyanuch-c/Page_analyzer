@@ -2,9 +2,50 @@
 
 {% block content %}
 {% include 'layout/flash.html' %}
-<h1>Сайт: {{ url_items['name'] }}</h1>
-<li> {{ url_items['id'] }}</li>
-<li>{{ url_items['name'] }}</li>
-<li>{{ url_items['created_at'] }}</li>
+<div class=" container-lg pb-5">
+    <div class="row ">
+        <table class="table table-hover table-bordered caption-top" data-test="url">
+            <caption class="h1 text-dark"> Сайт: {{ url_items['name'] }}</caption>
+            <tbody>
+            <tr>
+                <th class="col-md-2"> ID</th>
+                <td class="col-md-2">{{ url_items['id'] }}</td>
+            </tr>
+            <tr>
+                <th>Имя</th>
+                <td>{{ url_items['name'] }}</td>
+            </tr>
+            <tr>
+                <th>Дата создания</th>
+                <td colspan="2">{{ url_items['created_at'] }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
+<div class="container">
+    <div class="row">
+        <table class="table table-hover table-bordered caption-top ">
+            <caption>
+                <h2 class="mb-3 text-dark">Проверки</h2>
+                <form action="{{ url_for('url_checks', url_id = url_items['id']  )}}" method="post">
+                    <input type="submit" class="btn btn-primary mb-2" value="Запустить проверку">
+                </form>
+            </caption>
+            <thead>
+            <tr>
+                <th class="col-1"> ID</th>
+                <th class="col-1">Код ответа</th>
+                <th class="col-2">h1</th>
+                <th class="col-2">title</th>
+                <th class="col-3">description</th>
+                <th class="col-1"> Дата создания</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

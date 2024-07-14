@@ -29,8 +29,6 @@ def check_exist_url(url):
     ):
         cursor.execute('SELECT * FROM urls WHERE name = %s', (url,))
         response = cursor.fetchone()
-        print(response)
-
         if response:
             return True
         return False
@@ -53,5 +51,4 @@ def get_url_items(url_id):
     ):
         cursor.execute('SELECT * FROM urls WHERE id = %s', (url_id,))
         response = cursor.fetchone()
-        print(response)
         return response
