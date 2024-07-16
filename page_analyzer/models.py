@@ -18,8 +18,7 @@ def add_new_url(url):
         make_connection() as connection,
         connection.cursor() as cursor,
     ):
-        cursor.execute('INSERT INTO urls (name) VALUES %s',
-                       (url,))
+        cursor.execute('INSERT INTO urls (name) VALUES (%s)', (url,))
         connection.commit()
 
 
