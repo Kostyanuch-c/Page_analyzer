@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-make install && psql -a -d $DATABASE_URL -f database.sql
+
+make install && export $(cat .env | xargs) && psql -a -d $DATABASE_URL -f database.sql

@@ -1,14 +1,12 @@
 DROP TABLE IF EXISTS urls, urls_checks;
 
-CREATE TABLE urls
-(
+CREATE TABLE urls(
     id         BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name       VARCHAR(255) NOT NULL UNIQUE,
     created_at DATE DEFAULT now()
 );
 
-CREATE TABLE urls_checks
-(
+CREATE TABLE urls_checks(
     id          BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     url_id      BIGINT,
     status_code INTEGER,
