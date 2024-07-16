@@ -4,7 +4,7 @@ CREATE TABLE urls
 (
     id         BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name       VARCHAR(255) NOT NULL UNIQUE,
-    created_at DATE         NOT NULL
+    created_at DATE DEFAULT now()
 );
 
 CREATE TABLE urls_checks

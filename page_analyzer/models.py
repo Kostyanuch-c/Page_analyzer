@@ -18,8 +18,8 @@ def add_new_url(url):
         make_connection() as connection,
         connection.cursor() as cursor,
     ):
-        cursor.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)',
-                       (url, date.today()))
+        cursor.execute('INSERT INTO urls (name) VALUES (%s, %s)',
+                       (url,))
         connection.commit()
 
 
