@@ -26,7 +26,7 @@
 
 <div class="container">
     <div class="row">
-        <table class="table table-hover table-bordered caption-top ">
+        <table class="table table-hover table-bordered caption-top" data-test="checks">
             <caption>
                 <h2 class="mb-3 text-dark">Проверки</h2>
                 <form action="{{ url_for('url_checks', url_id = url_items['id']  )}}" method="post">
@@ -34,16 +34,28 @@
                 </form>
             </caption>
             <thead>
-            <tr>
+            <tr class="align-text-top">
                 <th class="col-1"> ID</th>
                 <th class="col-1">Код ответа</th>
                 <th class="col-2">h1</th>
                 <th class="col-2">title</th>
-                <th class="col-3">description</th>
+                <th class="col-6">description</th>
                 <th class="col-1"> Дата создания</th>
             </tr>
             </thead>
             <tbody>
+            {% if items_check_url %}
+            {% for item in items_check_url %}
+            <tr>
+                <td class="col-1">{{ item['id'] }}</td>
+                <td class="col-1">{{ item['status_code'] }} </td>
+                <td class="col-2">{{ item['h1'] }}</td>
+                <td class="col-2">{{ item['title'] }}</td>
+                <td class="col-5">{{ item['description'] }}</td>
+                <td class="col-1">{{ item['created_at'] }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
             </tbody>
         </table>
     </div>
