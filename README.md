@@ -4,9 +4,11 @@
 
 # Page analyzer
 
-[Page Analyzer](https://page-analyzer-bvtc.onrender.com) – this site that analyzes trusted pages for SEO suitability
+[Page Analyzer](https://page-analyzer-bvtc.onrender.com) – this site that analyzes trusted pages for SEO suitability.
 
 ### To run locally you need the following commands:
+
+*Also you must have [poetry](https://python-poetry.org/) installed.*
 
 + **Download**
 
