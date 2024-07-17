@@ -8,7 +8,6 @@ from flask import (
     url_for,
     redirect,
     flash,
-    request,
     abort
 )
 
@@ -17,23 +16,25 @@ app.config.from_object(Config)
 
 
 @app.route('/', methods=['GET', 'POST'])
-def get_and_check_url():
+def get_main_page():
+    form = URLForm()
+    return render_template('index.html', form=form)
+
+
+@app.post('/urls')
+def add_url():
     form = URLForm()
     if form.validate_on_submit():
         url = parse_url.get_netloc_url(form.url.data)
-
         if models.check_exist_url(url):
             flash('Страница уже существует', category='info')
         else:
             models.add_new_url(url)
             flash('Страница успешно добавлена', category='success')
-
         url_id = models.get_url_id(url)
         return redirect(url_for('get_url', url_id=url_id)), 302
 
-    if request.method == 'POST':
-        flash('Некорректный URL', category='error')
-
+    flash('Некорректный URL', category='error')
     return render_template('index.html', form=form)
 
 
