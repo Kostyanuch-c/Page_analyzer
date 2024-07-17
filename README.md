@@ -8,7 +8,7 @@
 
 ### To run locally you need the following commands:
 
-*Also you must have [poetry](https://python-poetry.org/) installed.*
+*Also you must have [poetry](https://python-poetry.org/docs/) installed.*
 
 + **Download**
 
