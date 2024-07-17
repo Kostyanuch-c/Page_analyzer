@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def get_main_page():
     form = URLForm()
     return render_template('index.html', form=form)
@@ -31,6 +31,7 @@ def add_url():
         else:
             models.add_new_url(url)
             flash('Страница успешно добавлена', category='success')
+
         url_id = models.get_url_id(url)
         return redirect(url_for('get_url', url_id=url_id)), 302
 
