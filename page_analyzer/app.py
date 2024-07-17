@@ -35,7 +35,7 @@ def add_url():
         return redirect(url_for('get_url', url_id=url_id)), 302
 
     flash('Некорректный URL', category='error')
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form), 422
 
 
 @app.route('/urls/<int:url_id>')
