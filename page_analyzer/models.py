@@ -13,18 +13,18 @@ def make_connection():
         return exception
 
 
-def add_new_url(url):
+def add_new_url(url, func_connection=make_connection):
     with (
-        make_connection() as connection,
+        func_connection() as connection,
         connection.cursor() as cursor,
     ):
         cursor.execute('INSERT INTO urls (name) VALUES (%s)', (url,))
         connection.commit()
 
 
-def check_exist_url(url):
+def check_exist_url(url, func_connection=make_connection):
     with (
-        make_connection() as connection,
+        func_connection() as connection,
         connection.cursor() as cursor,
     ):
         cursor.execute('SELECT * FROM urls WHERE name = %s', (url,))
@@ -34,9 +34,9 @@ def check_exist_url(url):
         return False
 
 
-def get_url_id(url):
+def get_url_id(url, func_connection=make_connection):
     with (
-        make_connection() as connection,
+        func_connection() as connection,
         connection.cursor() as cursor,
     ):
         cursor.execute('SELECT id FROM urls WHERE name = %s', (url,))
@@ -44,9 +44,9 @@ def get_url_id(url):
         return response['id']
 
 
-def get_url_items(url_id):
+def get_url_items(url_id, func_connection=make_connection):
     with (
-        make_connection() as connection,
+        func_connection() as connection,
         connection.cursor() as cursor,
     ):
         cursor.execute('SELECT * FROM urls WHERE id = %s', (url_id,))
@@ -54,9 +54,9 @@ def get_url_items(url_id):
         return response
 
 
-def add_new_check(url, url_id):
+def add_new_check(url, url_id, func_connection=make_connection):
     with (
-        make_connection() as connection,
+        func_connection() as connection,
         connection.cursor() as cursor,
     ):
         try:
@@ -75,9 +75,9 @@ def add_new_check(url, url_id):
             return False
 
 
-def get_checks_url(url_id):
+def get_checks_url(url_id, func_connection=make_connection):
     with (
-        make_connection() as connection,
+        func_connection() as connection,
         connection.cursor() as cursor,
     ):
         cursor.execute('SELECT * FROM urls_checks '
@@ -86,9 +86,9 @@ def get_checks_url(url_id):
         return response
 
 
-def get_checks_urls():
+def get_checks_urls(func_connection=make_connection):
     with (
-        make_connection() as connection,
+        func_connection() as connection,
         connection.cursor() as cursor,
     ):
         cursor.execute('SELECT '

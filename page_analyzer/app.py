@@ -16,7 +16,7 @@ app.config.from_object(Config)
 
 
 @app.route('/')
-def get_main_page():
+def index():
     form = URLForm()
     return render_template('index.html', form=form)
 
@@ -40,14 +40,14 @@ def add_url():
 
 
 @app.route('/urls/<int:url_id>')
-def get_url(url_id=None):
+def get_url(url_id):
     url_items = models.get_url_items(url_id)
     if not url_items:
         abort(404)
     items_check_url = models.get_checks_url(url_id)
     return render_template('url_check.html',
                            url_items=url_items,
-                           items_check_url=items_check_url, )
+                           items_check_url=items_check_url,)
 
 
 @app.post('/urls/<int:url_id>/checks')
