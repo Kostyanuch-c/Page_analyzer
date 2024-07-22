@@ -5,7 +5,6 @@ from page_analyzer.config import Config
 import psycopg2
 
 
-
 def make_connection():
     try:
         return psycopg2.connect(Config.DATABASE_URL,
@@ -27,6 +26,7 @@ def check_exist_url(url, connection):
         if response:
             return True
         return False
+
 
 def get_url_id(url, connection):
     with connection.cursor() as cursor:
