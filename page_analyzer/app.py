@@ -2,6 +2,7 @@ from page_analyzer.forms import URLForm
 from page_analyzer.config import Config
 from page_analyzer import parse_url
 from page_analyzer import models
+
 from flask import (
     Flask,
     render_template,
@@ -26,13 +27,16 @@ def add_url():
     form = URLForm()
     if form.validate_on_submit():
         url = parse_url.get_netloc_url(form.url.data)
-        if models.check_exist_url(url):
+        connection = models.make_connection()
+        if models.check_exist_url(url, connection):
             flash('Страница уже существует', category='info')
         else:
-            models.add_new_url(url)
+            models.add_new_url(url, connection)
             flash('Страница успешно добавлена', category='success')
 
-        url_id = models.get_url_id(url)
+        url_id = models.get_url_id(url, connection)
+
+        connection.close()
         return redirect(url_for('get_url', url_id=url_id)), 302
 
     flash('Некорректный URL', category='error')
@@ -41,28 +45,36 @@ def add_url():
 
 @app.route('/urls/<int:url_id>')
 def get_url(url_id):
-    url_items = models.get_url_items(url_id)
+    connection = models.make_connection()
+    url_items = models.get_url_items(url_id, connection)
     if not url_items:
         abort(404)
-    items_check_url = models.get_checks_url(url_id)
+    items_check_url = models.get_checks_url(url_id, connection)
+
+    connection.close()
     return render_template('url_check.html',
                            url_items=url_items,
-                           items_check_url=items_check_url,)
+                           items_check_url=items_check_url, )
 
 
 @app.post('/urls/<int:url_id>/checks')
 def url_checks(url_id):
-    url = models.get_url_items(url_id)['name']
-    if models.add_new_check(url, url_id):
+    connection = models.make_connection()
+    url = models.get_url_items(url_id, connection)['name']
+    if models.add_new_check(url, url_id, connection):
         flash('Страница успешно проверена', category='success')
     else:
         flash('Произошла ошибка при проверке', category='error')
+
+    connection.close()
     return redirect(url_for('get_url', url_id=url_id))
 
 
 @app.route('/urls')
 def get_urls():
-    urls_checks = models.get_checks_urls()
+    connection = models.make_connection()
+    urls_checks = models.get_checks_urls(connection)
+    connection.close()
     return render_template('urls.html', urls_checks=urls_checks)
 
 
