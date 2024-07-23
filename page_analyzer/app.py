@@ -2,7 +2,6 @@ from page_analyzer.forms import URLForm
 from page_analyzer.config import Config
 from page_analyzer import parse_url
 from page_analyzer import models
-
 from flask import (
     Flask,
     render_template,
