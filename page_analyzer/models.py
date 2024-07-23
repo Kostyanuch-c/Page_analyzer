@@ -12,8 +12,8 @@ def activate_connect(connect_func):
         def inner(*args, **kwargs):
             try:
                 connection = connect_func()
-                return_func = function(connection, *args, **kwargs)
-                return return_func
+                result = function(connection, *args, **kwargs)
+                return result
             except psycopg2.Error as exception:
                 print(f'Ошибка: {exception}')
             finally:
