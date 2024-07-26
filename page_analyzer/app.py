@@ -1,7 +1,7 @@
 from page_analyzer.forms import URLForm
 from page_analyzer.config import Config
 from page_analyzer import parse_url
-from page_analyzer import models
+from page_analyzer import db
 from flask import (
     Flask,
     render_template,
@@ -25,15 +25,15 @@ def index():
 def add_url():
     form = URLForm()
     if form.validate_on_submit():
-        connection = models.make_connection()
+        connection = db.make_connection()
         url = parse_url.get_netloc_url(form.url.data)
-        if models.check_exist_url(connection, url):
+        if db.check_exist_url(connection, url):
             flash('Страница уже существует', category='info')
         else:
-            models.add_new_url(connection, url)
+            db.add_new_url(connection, url)
             flash('Страница успешно добавлена', category='success')
 
-        url_id = models.get_url_id(connection, url)
+        url_id = db.get_url_id(connection, url)
 
         connection.close()
         return redirect(url_for('get_url', url_id=url_id)), 302
@@ -44,11 +44,11 @@ def add_url():
 
 @app.route('/urls/<int:url_id>')
 def get_url(url_id):
-    connection = models.make_connection()
-    url_items = models.get_url_items(connection, url_id)
+    connection = db.make_connection()
+    url_items = db.get_url_items(connection, url_id)
     if not url_items:
         abort(404)
-    items_check_url = models.get_checks_url(connection, url_id)
+    items_check_url = db.get_checks_url(connection, url_id)
 
     connection.close()
     return render_template('url_check.html',
@@ -58,9 +58,9 @@ def get_url(url_id):
 
 @app.post('/urls/<int:url_id>/checks')
 def url_checks(url_id):
-    connection = models.make_connection()
-    url = models.get_url_items(connection, url_id)['name']
-    if models.add_new_check(connection, url, url_id):
+    connection = db.make_connection()
+    url = db.get_url_items(connection, url_id)['name']
+    if db.add_new_check(connection, url, url_id):
         flash('Страница успешно проверена', category='success')
     else:
         flash('Произошла ошибка при проверке', category='error')
@@ -70,8 +70,8 @@ def url_checks(url_id):
 
 @app.route('/urls')
 def get_urls():
-    connection = models.make_connection()
-    urls_checks = models.get_checks_urls(connection)
+    connection = db.make_connection()
+    urls_checks = db.get_checks_urls(connection)
     connection.close()
     return render_template('urls.html', urls_checks=urls_checks)
 
