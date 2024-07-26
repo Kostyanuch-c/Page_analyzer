@@ -25,14 +25,17 @@ def index():
 def add_url():
     form = URLForm()
     if form.validate_on_submit():
+        connection = models.make_connection()
         url = parse_url.get_netloc_url(form.url.data)
-        if models.check_exist_url(url):
+        if models.check_exist_url(connection, url):
             flash('Страница уже существует', category='info')
         else:
-            models.add_new_url(url)
+            models.add_new_url(connection, url)
             flash('Страница успешно добавлена', category='success')
 
-        url_id = models.get_url_id(url)
+        url_id = models.get_url_id(connection, url)
+
+        connection.close()
         return redirect(url_for('get_url', url_id=url_id)), 302
 
     flash('Некорректный URL', category='error')
@@ -41,11 +44,13 @@ def add_url():
 
 @app.route('/urls/<int:url_id>')
 def get_url(url_id):
-    url_items = models.get_url_items(url_id)
+    connection = models.make_connection()
+    url_items = models.get_url_items(connection, url_id)
     if not url_items:
         abort(404)
-    items_check_url = models.get_checks_url(url_id)
+    items_check_url = models.get_checks_url(connection, url_id)
 
+    connection.close()
     return render_template('url_check.html',
                            url_items=url_items,
                            items_check_url=items_check_url)
@@ -53,18 +58,21 @@ def get_url(url_id):
 
 @app.post('/urls/<int:url_id>/checks')
 def url_checks(url_id):
-    url = models.get_url_items(url_id)['name']
-    if models.add_new_check(url, url_id):
+    connection = models.make_connection()
+    url = models.get_url_items(connection, url_id)['name']
+    if models.add_new_check(connection, url, url_id):
         flash('Страница успешно проверена', category='success')
     else:
         flash('Произошла ошибка при проверке', category='error')
-
+    connection.close()
     return redirect(url_for('get_url', url_id=url_id))
 
 
 @app.route('/urls')
 def get_urls():
-    urls_checks = models.get_checks_urls()
+    connection = models.make_connection()
+    urls_checks = models.get_checks_urls(connection)
+    connection.close()
     return render_template('urls.html', urls_checks=urls_checks)
 
 

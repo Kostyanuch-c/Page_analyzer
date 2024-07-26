@@ -1,27 +1,8 @@
-import requests
 from page_analyzer import parse_url
-from psycopg2.extras import RealDictCursor
 from page_analyzer.config import Config
-from functools import wraps
+from psycopg2.extras import RealDictCursor
 import psycopg2
-
-
-def activate_connect(connect_func):
-    def wrapper(function):
-        @wraps(function)
-        def inner(*args, **kwargs):
-            try:
-                connection = connect_func()
-                result = function(connection, *args, **kwargs)
-                return result
-            except psycopg2.Error as exception:
-                print(f'Ошибка: {exception}')
-            finally:
-                connection.close()
-
-        return inner
-
-    return wrapper
+import requests
 
 
 def make_connection():
@@ -29,14 +10,12 @@ def make_connection():
                             cursor_factory=RealDictCursor)
 
 
-@activate_connect(make_connection)
 def add_new_url(connection, url):
     with connection.cursor() as cursor:
         cursor.execute('INSERT INTO urls (name) VALUES (%s)', (url,))
         connection.commit()
 
 
-@activate_connect(make_connection)
 def check_exist_url(connection, url):
     with connection.cursor() as cursor:
         cursor.execute('SELECT * FROM urls WHERE name = %s', (url,))
@@ -46,7 +25,6 @@ def check_exist_url(connection, url):
         return False
 
 
-@activate_connect(make_connection)
 def get_url_id(connection, url):
     with connection.cursor() as cursor:
         cursor.execute('SELECT id FROM urls WHERE name = %s', (url,))
@@ -54,7 +32,6 @@ def get_url_id(connection, url):
         return response['id']
 
 
-@activate_connect(make_connection)
 def get_url_items(connection, url_id):
     with connection.cursor() as cursor:
         cursor.execute('SELECT * FROM urls WHERE id = %s', (url_id,))
@@ -62,7 +39,6 @@ def get_url_items(connection, url_id):
         return response
 
 
-@activate_connect(make_connection)
 def add_new_check(connection, url, url_id):
     with connection.cursor() as cursor:
         try:
@@ -81,7 +57,6 @@ def add_new_check(connection, url, url_id):
             return False
 
 
-@activate_connect(make_connection)
 def get_checks_url(connection, url_id):
     with connection.cursor() as cursor:
         cursor.execute('SELECT * FROM urls_checks '
@@ -90,7 +65,6 @@ def get_checks_url(connection, url_id):
         return response
 
 
-@activate_connect(make_connection)
 def get_checks_urls(connection):
     with connection.cursor() as cursor:
         cursor.execute('SELECT '
